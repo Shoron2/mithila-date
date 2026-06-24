@@ -188,7 +188,9 @@ and go on a date with me? 🌹✨</b>
 
 </p></p>
 
-<button class="yes" onclick="showPage(2)">
+<button class="yes" onclick="startRomance()">
+YES 😍
+</button>
 YES 😍
 </button>
 
@@ -420,6 +422,51 @@ btn.innerHTML="🎵 Play Music";
 
 }
 </script>
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+function startRomance() {
+
+    let music = document.getElementById("bgMusic");
+    music.play();
+
+    confetti({
+        particleCount: 200,
+        spread: 120,
+        origin: { y: 0.6 }
+    });
+
+    showPage(2);
+}
+
+function createHeart() {
+    const heart = document.createElement("div");
+
+    heart.innerHTML = "❤️";
+    heart.style.position = "fixed";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = "100vh";
+    heart.style.fontSize = (20 + Math.random() * 25) + "px";
+    heart.style.pointerEvents = "none";
+    heart.style.zIndex = "9999";
+    heart.style.animation = "floatUp 6s linear forwards";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 6000);
+}
+
+setInterval(createHeart, 600);
+ function startRomance() {
+    document.getElementById("bgMusic").play();
+    showPage(2);
+}
+</script>
 </body>
 </html>
