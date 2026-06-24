@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mithila ❤️ Shoron</title>
+<title> Mithila ❤️ Shoron</title>
 
 <style>
 *{
@@ -23,6 +23,7 @@ overflow:hidden;
 }
 
 .card{
+animation: floatCard 3s ease-in-out infinite alternate;
 background:white;
 width:min(90%,700px);
 padding:40px;
@@ -34,9 +35,13 @@ z-index:2;
 }
 
 h1{
-font-size:3rem;
-margin-bottom:15px;
+h1{
+font-size:6rem;
+font-weight:800;
 color:#ff4d6d;
+text-shadow:0 0 25px rgba(255,77,109,.5);
+margin-bottom:20px;
+}
 }
 
 p{
@@ -120,9 +125,44 @@ transform:translateY(-100px);
 opacity:1;
 }
 }
+100%{
+transform:translateY(-100px);
+opacity:1;
+}
+}
+
+@keyframes floatCard{
+from{
+transform:translateY(0);
+}
+to{
+transform:translateY(-12px);
+}
+}
 </style>
 </head>
 <body>
+ <audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" onclick="toggleMusic()"
+style="
+position:fixed;
+top:20px;
+right:20px;
+z-index:9999;
+padding:12px 18px;
+border:none;
+border-radius:30px;
+background:#ff4d6d;
+color:white;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 20px rgba(255,77,109,.5);
+">
+🎵 Play Music
+</button>
 
 <div id="hearts"></div>
 
@@ -131,7 +171,22 @@ opacity:1;
 <!-- PAGE 1 -->
 <div id="page1">
 <h1>Mithila ❤️</h1>
-<p>Will you go on a date with me?</p>
+<p> <p style="font-size:1.6rem;line-height:1.8;">
+Hey Mithila ❤️<br><br>
+
+From the moment we started talking,
+you've made ordinary days feel a little more special.
+
+<br><br>
+
+So I have a question...
+
+<br><br>
+
+<b>Would you make me the happiest guy
+and go on a date with me? 🌹✨</b>
+
+</p></p>
 
 <button class="yes" onclick="showPage(2)">
 YES 😍
@@ -350,7 +405,20 @@ heart.remove();
 }
 
 setInterval(createHeart,500);
+function toggleMusic(){
 
+const music=document.getElementById("bgMusic");
+const btn=document.getElementById("musicBtn");
+
+if(music.paused){
+music.play();
+btn.innerHTML="⏸ Pause Music";
+}else{
+music.pause();
+btn.innerHTML="🎵 Play Music";
+}
+
+}
 </script>
 
 </body>
