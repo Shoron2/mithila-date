@@ -1,45 +1,357 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Shoron ❤️ Mithila</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mithila ❤️ Shoron</title>
+
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-font-family:Arial,sans-serif;
 background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-margin:0;
-text-align:center;
+overflow:hidden;
 }
+
 .card{
 background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 0 20px rgba(0,0,0,.2);
+width:min(90%,700px);
+padding:40px;
+border-radius:30px;
+box-shadow:0 15px 40px rgba(0,0,0,.15);
+text-align:center;
+position:relative;
+z-index:2;
 }
+
+h1{
+font-size:3rem;
+margin-bottom:15px;
+color:#ff4d6d;
+}
+
+p{
+font-size:1.2rem;
+margin-bottom:20px;
+}
+
 button{
-padding:10px 20px;
-font-size:18px;
+padding:14px 28px;
 border:none;
-border-radius:10px;
+border-radius:30px;
+cursor:pointer;
+font-size:18px;
+margin:10px;
+}
+
+.yes{
 background:#ff4d6d;
 color:white;
+}
+
+.no{
+background:#ddd;
+position:relative;
+}
+
+.hidden{
+display:none;
+}
+
+.time{
+background:#ff85a2;
+color:white;
+}
+
+.foods{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.food{
+padding:15px;
+border:2px solid #eee;
+border-radius:15px;
 cursor:pointer;
+transition:.3s;
+}
+
+.food:hover{
+transform:scale(1.05);
+}
+
+.food.selected{
+border-color:#ff4d6d;
+background:#fff0f3;
+}
+
+.summary{
+font-size:20px;
+line-height:2;
+text-align:left;
+}
+
+.heart{
+position:absolute;
+color:white;
+font-size:24px;
+animation:float 8s linear infinite;
+opacity:.5;
+}
+
+@keyframes float{
+0%{
+transform:translateY(100vh);
+opacity:0;
+}
+100%{
+transform:translateY(-100px);
+opacity:1;
+}
 }
 </style>
 </head>
 <body>
 
+<div id="hearts"></div>
+
 <div class="card">
+
+<!-- PAGE 1 -->
+<div id="page1">
 <h1>Mithila ❤️</h1>
 <p>Will you go on a date with me?</p>
-<button onclick="alert('Yay! ❤️')">YES</button>
+
+<button class="yes" onclick="showPage(2)">
+YES 😍
+</button>
+
+<button class="no" id="noBtn">
+NO 🙈
+</button>
 </div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="hidden">
+<h1>📅</h1>
+<p>Pick a date</p>
+
+<input type="date" id="datePicker">
+
+<br><br>
+
+<button class="yes" onclick="saveDate()">
+Next ❤️
+</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="hidden">
+
+<h1>⏰</h1>
+
+<p>Choose a time</p>
+
+<button class="time" onclick="pickTime('9 AM - Morning ☀️')">9 AM</button>
+<button class="time" onclick="pickTime('12 PM - Noon 🌤️')">12 PM</button>
+<button class="time" onclick="pickTime('4 PM - Afternoon 🌸')">4 PM</button>
+<button class="time" onclick="pickTime('6 PM - Evening 🌙')">6 PM</button>
+
+</div>
+
+<!-- PAGE 4 -->
+<div id="page4" class="hidden">
+
+<h1>🍽️</h1>
+<p>What should we eat?</p>
+
+<div class="foods">
+
+<div class="food" onclick="toggleFood(this,'Chinese')">🥡 Chinese</div>
+
+<div class="food" onclick="toggleFood(this,'Kacchi Biryani')">🍛 Kacchi</div>
+
+<div class="food" onclick="toggleFood(this,'Tehari')">🍚 Tehari</div>
+
+<div class="food" onclick="toggleFood(this,'Burger')">🍔 Burger</div>
+
+<div class="food" onclick="toggleFood(this,'Pizza')">🍕 Pizza</div>
+
+<div class="food" onclick="toggleFood(this,'Fuchka')">🥙 Fuchka</div>
+
+<div class="food" onclick="toggleFood(this,'Ice Cream')">🍨 Ice Cream</div>
+
+</div>
+
+<br>
+
+<button class="yes" onclick="finishDate()">
+Let's Go ❤️
+</button>
+
+</div>
+
+<!-- PAGE 5 -->
+<div id="page5" class="hidden">
+
+<h1>🎉 Date Confirmed 🎉</h1>
+
+<div class="summary" id="summary"></div>
+
+<br>
+
+<p>
+❤️ Mithila & Shoron ❤️
+</p>
+
+<p>
+"Every love story starts with a simple yes."
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+let chosenDate="";
+let chosenTime="";
+let foods=[];
+
+function showPage(page){
+for(let i=1;i<=5;i++){
+document.getElementById("page"+i).classList.add("hidden");
+}
+document.getElementById("page"+page).classList.remove("hidden");
+}
+
+function saveDate(){
+
+chosenDate=document.getElementById("datePicker").value;
+
+if(!chosenDate){
+alert("Choose a date ❤️");
+return;
+}
+
+showPage(3);
+}
+
+function pickTime(time){
+chosenTime=time;
+showPage(4);
+}
+
+function toggleFood(el,food){
+
+el.classList.toggle("selected");
+
+if(foods.includes(food)){
+foods=foods.filter(f=>f!==food);
+}
+else{
+foods.push(food);
+}
+}
+
+function finishDate(){
+
+if(foods.length===0){
+alert("Pick at least one food 😋");
+return;
+}
+
+document.getElementById("summary").innerHTML=`
+📅 <b>Date:</b> ${chosenDate}<br>
+⏰ <b>Time:</b> ${chosenTime}<br>
+🍽️ <b>Food:</b> ${foods.join(", ")}
+`;
+
+showPage(5);
+
+confetti();
+}
+
+function confetti(){
+
+for(let i=0;i<80;i++){
+
+let c=document.createElement("div");
+
+c.innerHTML="🎉";
+
+c.style.position="fixed";
+c.style.left=Math.random()*100+"vw";
+c.style.top="-20px";
+c.style.fontSize="30px";
+
+document.body.appendChild(c);
+
+let pos=0;
+
+let fall=setInterval(()=>{
+
+pos+=5;
+
+c.style.top=pos+"px";
+
+if(pos>window.innerHeight){
+
+clearInterval(fall);
+c.remove();
+
+}
+
+},20);
+}
+}
+
+const noBtn=document.getElementById("noBtn");
+
+noBtn.addEventListener("mouseover",()=>{
+
+const x=Math.random()*300-150;
+const y=Math.random()*300-150;
+
+noBtn.style.transform=
+`translate(${x}px,${y}px)`;
+
+});
+
+function createHeart(){
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+heart.innerHTML="❤️";
+
+heart.style.left=Math.random()*100+"vw";
+
+heart.style.animationDuration=
+(Math.random()*4+4)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},8000);
+
+}
+
+setInterval(createHeart,500);
+
+</script>
 
 </body>
 </html>
-
-
